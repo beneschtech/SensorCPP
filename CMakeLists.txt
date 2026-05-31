@@ -1,0 +1,22 @@
+cmake_minimum_required(VERSION 3.20)
+project(SensorCPP)
+set(CMAKE_CXX_STANDARD 17)
+include(CheckIncludeFiles)
+
+check_include_files("linux/i2c-dev.h;i2c/smbus.h" HAVE_SMBUS_INCLUDES LANGUAGE C)
+if(HAVE_SMBUS_INCLUDES)
+    message(STATUS "SMBUS library headers found")
+else()
+    message(FATAL_ERROR "SMBUS library not installed or not found")
+endif()
+find_library(SMBUS_LIBRARIES NAMES i2c)
+if(SMBUS_LIBRARIES)
+    message(STATUS "SMBUS Library found at: ${SMBUS_LIBRARIES}")
+else()
+    message(FATAL_ERROR "SMBUS Library NOT found!")
+endif()
+
+include_directories(${CMAKE_SOURCE_DIR}/include)
+
+add_subdirectory(lib)
+add_subdirectory(examples)
